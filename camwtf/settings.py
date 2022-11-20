@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     #
-    'wtf.apps.WtfConfig'
+    'wtf.apps.WtfConfig',
+    'home.apps.HomeConfig'
 ]
 
 MIDDLEWARE = [
