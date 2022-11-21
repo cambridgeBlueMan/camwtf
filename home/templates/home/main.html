@@ -12,11 +12,15 @@
 
 <div class="jumbotron text-center">
   <h1>AA</h1>
-  <p>Cambridgeshire Alcoholics Anonymous Meeting List {{ aTag }}</p> 
+  <p>Cambridgeshire Alcoholics Anonymous Meeting List {{ meetings }}</p> 
 </div>
   
 <div class="container">
   <div class="row">
+    {% for meeting in meetings %}
+    <p>hello</p>
+      {{ meeting.group }}
+    {% endfor %}
     <div class="col-sm-4">
       <h3>Column 1</h3>
       <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
