@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+
 html_doc = """
 <html lang="en"><head><style>.LGLeeN-keyboard-shortcuts-view{display:-webkit-box;display:-webkit-flex;display:-moz-box;display:-ms-flexbox;display:flex}.LGLeeN-keyboard-shortcuts-view table,.LGLeeN-keyboard-shortcuts-view tbody,.LGLeeN-keyboard-shortcuts-view td,.LGLeeN-keyboard-shortcuts-view tr{background:inherit;border:none;margin:0;padding:0}.LGLeeN-keyboard-shortcuts-view table{display:table}.LGLeeN-keyboard-shortcuts-view tr{display:table-row}.LGLeeN-keyboard-shortcuts-view td{-moz-box-sizing:border-box;box-sizing:border-box;display:table-cell;color:#000;padding:6px;vertical-align:middle;white-space:nowrap}.LGLeeN-keyboard-shortcuts-view td .VdnQmO-keyboard-shortcuts-view--shortcut-key{background-color:#e8eaed;border-radius:2px;border:none;-moz-box-sizing:border-box;box-sizing:border-box;color:inherit;display:inline-block;font-family:Google Sans Text,Roboto,Arial,sans-serif;line-height:16px;margin:0 2px;min-height:20px;min-width:20px;padding:2px 4px;position:relative;text-align:center}
 </style><style>.gm-control-active>img{box-sizing:content-box;display:none;left:50%;pointer-events:none;position:absolute;top:50%;transform:translate(-50%,-50%)}.gm-control-active>img:nth-child(1){display:block}.gm-control-active:focus>img:nth-child(1),.gm-control-active:hover>img:nth-child(1),.gm-control-active:active>img:nth-child(1),.gm-control-active:disabled>img:nth-child(1){display:none}.gm-control-active:focus>img:nth-child(2),.gm-control-active:hover>img:nth-child(2){display:block}.gm-control-active:active>img:nth-child(3){display:block}.gm-control-active:disabled>img:nth-child(4){display:block}
@@ -2045,14 +2047,13 @@ for tag in soup.find_all('div'):
             days.append(tag.string)
             meetingAddress.append(tag.next_sibling.next_sibling.string)
         if tag["class"]==['time']:
-            for string in tag.strings:
+            for string in tag.stripped_strings:
                 if string != "Time:":
+				    #print(repr(string))
                     txt = repr(string)
-					#hjhjhjhjhj
                     x = txt.split()
-					
 					#hjhjhjhjhj
-                    meetingTime.append(x[1] + x[4])
+                    meetingTime.append(string)
         if tag["class"]==['postcode']:
             for string in tag.strings:
                 if string != "Postcode:":
@@ -2062,13 +2063,35 @@ for tag in soup.find_all('div'):
     except:
         print("error!")
 
+#parse meeting time
+meetingStartTime = []
+meetingDuration = []
+for myTime in meetingTime:
+	meetingStartTime.append(myTime[0:5].replace(".", ":"))
+	ixh = myTime.find('hr')
+	if ixh != -1:
+		h = int(myTime[ixh-1])
+	else:
+		h = 0
+	ixm = myTime.find('mins')
+	if ixm != -1:
+
+		m = int(myTime[ixh+3:ixh+5])
+		print(m, myTime, ixh)
+	else:
+		m = 0
+
+	meetingDuration.append(timedelta(hours=h, minutes = m))
+
 spacer = '##################################'
 print(spacer)
 print(days)
 print(spacer)
 print(meetingName)
 print(spacer)
-print(meetingTime)
+print(meetingStartTime)
+print(spacer)
+print(meetingDuration)
 print(spacer)
 print(meetingAddress)
 print(spacer)
@@ -2080,3 +2103,12 @@ print(len(meetingTime))
 print(len(meetingAddress))
 print(len(meetingPostCode))
 print(spacer)
+
+""" now we have all the data we can add it to the database
+
+to run this from django shell
+
+>>> exec(open('soup/soup2.py').read())
+
+"""
+
