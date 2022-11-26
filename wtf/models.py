@@ -41,6 +41,7 @@ class Venue(models.Model):
     name=models.CharField(max_length=250)
     address1=models.CharField(max_length=250)
     address2=models.CharField(max_length=250, blank=True)
+    address3=models.CharField(max_length=250, blank=True)
     postcode=models.CharField(max_length=10)
     lattitude=models.FloatField()
     longitude=models.FloatField()
@@ -58,7 +59,7 @@ class Meeting(models.Model):
     day = models.CharField(max_length=10, choices=DAY_CHOICES)
     startTime=models.TimeField()
     duration=models.DurationField()
-    description= models.TextField()
+    description= models.TextField(blank=True)
 
     def __str__(self):
         return f"{self.group}, {self.day}"
