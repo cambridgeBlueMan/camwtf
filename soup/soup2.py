@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-
+import sys
 # open a file which contains a text representation of a DOM which is to be examined.
 # note that the source document is of no use, it has to be the text representation of the dom
 # this is available from the developer console in chrome
@@ -9,8 +9,8 @@ html_doc = f.read()
 
 # define some lists
 
-# links contains a tags which have links to meeting info
-links = []
+# gps contains a tags which have gps to meeting info
+gps = []
 meetingStartTime = []
 meetingDuration = []
 days = []
@@ -34,8 +34,9 @@ from the h3 tags build a list of meeting names
 for tag in soup.find_all('h3'):
     # h3 tags contain an inner image tag, so the following to get to the string info
     for string in tag.strings:
-        print(repr(string))
-        meetingName.append(repr(string))
+        #print(repr(string))
+        #print(string)
+        meetingName.append(string.rstrip())
     #print(tag.string)
 
 """
@@ -47,7 +48,7 @@ for tag in soup.find_all('div'):
     try:
         #print (tag['class'])
         if tag['class'] == ["day"]:
-            print (tag.string)
+            #print (tag.string)
             days.append(tag.string)
             meetingAddress.append(tag.next_sibling.next_sibling.string)
         if tag["class"]==['time']:
@@ -61,7 +62,7 @@ for tag in soup.find_all('div'):
         if tag["class"]==['postcode']:
             for string in tag.strings:
                 if string != "Postcode:":
-                    meetingPostCode.append(repr(string))
+                    meetingPostCode.append(string)
         
 
     except:
@@ -70,23 +71,25 @@ for tag in soup.find_all('div'):
 """
 from the a tags derive latitude  and lontitude info
 """
-for link in soup.find_all('a'):
-	string = link.get("href")
+for gp in soup.find_all('a'):
+	string = gp.get("href")
 	#print(string)
-	if str(string).find("javascript:showMeetingInfo") != -1: links.append(string)
+	if str(string).find("javascript:showMeetingInfo") != -1: gps.append(string)
 
-for link in links:
-	#if link.href[0:25] == 'javascript:showMeetingInfo':
-	link = link.split(",")
+for gp in gps:
+	#if gp.href[0:25] == 'javascript:showMeetingInfo':
+	gp = gp.split(",")
 
-	lat = link[2].strip(",')")
-	long = link[3].strip(",')")
+	lat = gp[2].strip(",')")
+	long = gp[3].strip(",')")
 	latitude.append(float(lat))
 	longtitude.append(float(long))
-	print(link[2].strip(",')"))
-	print(link[3].strip(",')"))
+	#print(type(float(lat)))
+	#print(type(float(long)))
+	#print(gp[3].strip(",')"))
 
-
+#print(latitude)
+#print(longtitude)
 
 """
  parse meeting time into starttime and duratioon
@@ -109,11 +112,14 @@ for myTime in meetingTime:
 	# meeting end time
 	meetingDuration.append(timedelta(hours=h, minutes = m))
 
-for item in  meetingAddress:
-	item = item.lstrip("' ")
+for addrLine in  meetingAddress:
+	addrLine = addrLine.lstrip("' ")
 	#creates a list
-	item = item.rsplit(",")
-	address.append(item)
+	addrLine = addrLine.rsplit(",")
+	for item in addrLine:
+		item = item.lstrip()
+		print(item)
+	address.append(addrLine)
 
 #spacer = '##################################'
 # print(spacer)
@@ -147,7 +153,9 @@ for i in range(65):
 		address[i].append("")
 
 
-#print(address[2])
+# print(address[1])
+# print(address[2])
+# print(address[3])
 """ now we have all the data we can add it to the database
 
 to run this from django shell
@@ -155,27 +163,34 @@ to run this from django shell
 >>> exec(open('soup/soup2.py').read())
 
 """
-
+x = input("stop program?")
+if x == 'y': 
+	sys.exit()
+else:
+	pass
+	
 # import the models
 from wtf.models import Region, Ig, Group, Venue, Meeting
 
 # get the Ig 
 ig = Ig.objects.get(pk=1)
 
-for ix in range(65):
+for ix in range(48):
 	# add the group and save it in g
 	g = Group(name = meetingName[ix], ig = ig)
 	g.save()
-
+	print("==================================")
+	print (latitude[ix])
+	print(type(latitude[ix]))
 	# add the venue and saave it in v
 	v = Venue(
 		name = meetingName[ix],
-		address1 = address[0], 
-		address2 = address[1],
-		address3 = address[2],
+		address1 = address[ix][0], #prat!!!
+		address2 = address[ix][1],
+		address3 = address[ix][2],
 		postcode = meetingPostCode[ix],
 		latitude = latitude[ix],
-		longitude = longtitude[ix],
+		longtitude = longtitude[ix],
 		disabledAccess = True
 	)
 	v.save()
@@ -188,6 +203,7 @@ for ix in range(65):
 		duration = meetingDuration[ix],
 		description = ""
 	)
+	m.save()
 
 
 

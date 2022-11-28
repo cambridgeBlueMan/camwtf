@@ -43,8 +43,8 @@ class Venue(models.Model):
     address2=models.CharField(max_length=250, blank=True)
     address3=models.CharField(max_length=250, blank=True)
     postcode=models.CharField(max_length=10)
-    lattitude=models.FloatField()
-    longitude=models.FloatField()
+    latitude=models.FloatField(null=True)
+    longtitude=models.FloatField(null=True)
     disabledAccess=models.BooleanField()
     description=models.TextField(blank=True)
 
