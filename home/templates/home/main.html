@@ -12,20 +12,20 @@
 
 <div class="jumbotron text-center">
   <h1>AA</h1>
-  <p>Cambridgeshire Alcoholics Anonymous Meeting List {{ meetings }}</p> 
+  <p>Cambridgeshire Alcoholics Anonymous Meeting List}</p> 
 </div>
   
 <div class="container">
+  {% for meeting in meetings %}
   <div class="row">
-    {% for meeting in meetings %}
-    <p>hello</p>
-      {{ meeting.group }}
-    {% endfor %}
+    <h3>{{ meetings.startTime }}</h3>
+      
     <div class="col-sm-4">
       <h3>Column 1</h3>
       <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
       <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
     </div>
+    {% endfor %}
     <div class="col-sm-4">
       <h3>Column 2</h3>
       <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
