@@ -170,10 +170,13 @@ else:
 	pass
 	
 # import the models
-from wtf.models import Region, Ig, Group, Venue, Meeting
+from wtf.models import Region, Ig, Group, Venue, Meeting, Town
 
 # get the Ig 
 ig = Ig.objects.get(pk=1)
+
+# get a town
+t = Town.objects.get(pk=1721)
 
 for ix in range(48):
 	# add the group and save it in g
@@ -184,6 +187,7 @@ for ix in range(48):
 	print(type(latitude[ix]))
 	# add the venue and saave it in v
 	v = Venue(
+		town = t,
 		name = meetingName[ix],
 		address1 = address[ix][0], #prat!!!
 		address2 = address[ix][1],
