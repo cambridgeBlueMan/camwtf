@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     #
+    'django_extensions',
+    #
     'wtf.apps.WtfConfig',
     'home.apps.HomeConfig',
     'blog.apps.BlogConfig'

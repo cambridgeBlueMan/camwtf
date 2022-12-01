@@ -9,6 +9,13 @@ DAY_CHOICES = [
     ('Saturday', 'Saturday'),
     ('Sunday', 'Sunday')
 ]
+
+COUNTRY_CHOICES = [
+    ('England', 'England'),
+    ('Scotland', 'Scotland'),
+    ('Wales', 'Wales'),
+    ('Northern Ireland', 'Northern Ireland')
+]
 # Create your models here.
 class Region(models.Model):
     name = models.CharField(max_length=250)
@@ -35,9 +42,29 @@ class Group(models.Model):
     def __str__(self):
         return self.name
 
+class County(models.Model):
+    """
+    """
+    name = models.CharField(max_length=100)
+    country = models.CharField(max_length = 20,  default = 'England', choices = COUNTRY_CHOICES)
+
+    def __str__(self):
+        return self.name
+
+class Town(models.Model):
+    """
+    """
+    name = models.CharField(max_length=100)
+    county = models.ForeignKey(County, on_delete=models.CASCADE)
+    description = models.TextField(blank = True)
+
+    def __str__(self):
+        return self.name
+
 class Venue(models.Model):
     """
     """
+    town=models.ForeignKey(Town, on_delete=models.PROTECT, blank=True)
     name=models.CharField(max_length=250)
     address1=models.CharField(max_length=250)
     address2=models.CharField(max_length=250, blank=True)

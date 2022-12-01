@@ -17,26 +17,27 @@
   
 <div class="container">
   {% for meeting in meetings %}
+  {%if forloop.counter == 1 %}
   <div class="row">
-    <h3>{{ meetings.startTime }}</h3>
-      
+    {% endif %}
     <div class="col-sm-4">
-      <h3>Column 1</h3>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
-      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
+      <h3>{{ meeting.group }}</h3>
+      <p>{{meeting.venue.address1}}</p>
+      <p>{{meeting.venue.address2}}</p>
+      <p>{{meeting.venue.address3}}</p>
+      <p>{{meeting.venue.addressostcode}}</p>
+      <p>{{meeting.startTime}}</p>
+      <p>{{meeting.duration}}</p>
+      <p>Disabled access: {{meeting.disabledAccess}}</p>
     </div>
-    {% endfor %}
-    <div class="col-sm-4">
-      <h3>Column 2</h3>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
-      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
-    </div>
-    <div class="col-sm-4">
-      <h3>Column 3</h3>        
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
-      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
-    </div>
+  {% if forloop.counter|divisibleby:"3" %}
   </div>
+  <div class="row">
+
+  {% endif %}
+
+  {% endfor %}
+    
 </div>
 
 </body>
