@@ -6,7 +6,7 @@ app_name='home'
 urlpatterns = [
     # pre-defined class from Django
     #path('', TemplateView.as_view(template_name='home/main.html')),
-    path('', views.tags, name = 'tags'),
-    path('tags/<int:tagNum>', views.tags, name = 'tags'),
+    path('', views.main, name = 'main'),
+    #path('tags/<int:tagNum>', views.tags, name = 'tags'),
 
 ]

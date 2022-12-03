@@ -8,7 +8,7 @@ from django.template import loader
 
 from .models import Region, Ig, Group, Venue, Meeting
 
-def tags(request):
+def main(request):
     meetings = Meeting.objects.all()
     print(Meeting.objects.all)
     template = loader.get_template('home/main.html')
