@@ -3,7 +3,13 @@ import sys
 # open a file which contains a text representation of a DOM which is to be examined.
 # note that the source document is of no use, it has to be the text representation of the dom
 # this is available from the developer console in chrome
-f = open('soup/fenland.txt')
+# 53
+
+
+# Using the Web Inspector (F12), go to the Elements tab, right click on the <html> tag 
+# in your code and select Copy->Copy outerHTML. Then paste that into a new file and save.
+
+f = open('soup/south_anglia.txt')
 html_doc = f.read()
 
 
@@ -142,7 +148,8 @@ for addrLine in  meetingAddress:
 # print(len(meetingPostCode))
 # print(spacer)
 
-for i in range(65):
+meetingCount = len(days)-7
+for i in range(meetingCount):
 	try:
 		address[i][1]
 	except:
@@ -178,7 +185,7 @@ ig = Ig.objects.get(pk=1)
 # get a town
 t = Town.objects.get(pk=1721)
 
-for ix in range(48):
+for ix in range(meetingCount):
 	# add the group and save it in g
 	g = Group(name = meetingName[ix], ig = ig)
 	g.save()
