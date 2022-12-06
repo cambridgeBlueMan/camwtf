@@ -81,9 +81,19 @@ class Venue(models.Model):
 class Meeting(models.Model):
     """
     """
+    class Day(models.IntegerChoices):
+        SUN = 1, "Sunday"
+        MON = 2, "Monday"
+        TUE = 3, "Tuesday"
+        WED = 4, "Wednesday"
+        THU = 5, "Thursday"
+        FRI = 6, "Friday"
+        SAT = 7, "Saturday"
+
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE)
     day = models.CharField(max_length=10, choices=DAY_CHOICES)
+    dayAsInt= models.IntegerField(choices = Day.choices, default = Day.SUN)
     startTime=models.TimeField()
     duration=models.DurationField()
     description= models.TextField(blank=True)

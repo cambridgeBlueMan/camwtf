@@ -21,7 +21,7 @@ def intergroup(request, ig):
     Takes an integer representing an intergroup and filters meetings based on
     that intergroup
     """
-    meetings = Meeting.objects.filter(group__ig = ig)
+    meetings = Meeting.objects.filter(group__ig = ig).order_by('dayAsInt')
     template = loader.get_template('home/main.html')
     context = {
         'meetings': meetings
@@ -31,7 +31,7 @@ def intergroup(request, ig):
 def town(request, town):
     """ takes either an integer representing a town or string of the town name 
     and returns all meetings in that town """
-    
+
     if type(town) is str:
         meetings = Meeting.objects.filter(venue__town__name = town)
     
