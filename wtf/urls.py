@@ -10,4 +10,5 @@ urlpatterns = [
     path('intergroup/<int:ig>', views.intergroup, name = 'intergroup'),
     path('town/<int:town>', views.town, name = 'town_id'),
     path('town/<str:town>', views.town, name = 'town'),
+    path('byDay/<int:ig>', views.byDay, name = 'by_day'),
 ]

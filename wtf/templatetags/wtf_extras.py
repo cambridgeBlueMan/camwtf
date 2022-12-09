@@ -17,4 +17,7 @@ def duration(td):
     else:
         return 'duration: {} hour {} min'.format(hours, minutes)
         
-
+@register.filter
+def lnDay(d):
+    days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+    return days[d-1]

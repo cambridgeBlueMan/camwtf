@@ -21,7 +21,7 @@ def intergroup(request, ig):
     Takes an integer representing an intergroup and filters meetings based on
     that intergroup
     """
-    meetings = Meeting.objects.filter(group__ig = ig).order_by('dayAsInt')
+    meetings = Meeting.objects.filter(group__ig = ig).order_by('town','day')
     template = loader.get_template('home/main.html')
     context = {
         'meetings': meetings
@@ -43,5 +43,29 @@ def town(request, town):
         'meetings': meetings
     }
     return HttpResponse(template.render(context, request))
+
+def byDay(request, ig):
+    meetings = Meeting.objects.filter(group__ig = ig).order_by('day')
+    print(meetings)
+    # initialise a list to hold lists for each days meetings
+    sortedMeetings = [[],[],[],[],[],[],[]]
+    # for i in range(7):
+    #     # initialise inner lists to hold the data by day
+    #     sortedMeetings[i]=[]
+    print(sortedMeetings)
+    for meeting in meetings:
+        for num in range(7):
+            if meeting.day == num + 1:
+                sortedMeetings[num].append(meeting)
+    print(sortedMeetings)
+    days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+    template = loader.get_template('home/by_day.html')
+    context = {
+        'meetings': meetings,
+        'sortedMeetings': sortedMeetings,
+        'days': days
+    }
+    return HttpResponse(template.render(context, request))
+
 
 

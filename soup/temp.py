@@ -1,3 +1,6 @@
+avar = 1, "Sunday"
+print(type(avar))
+
 """ def say_hello(name):
     return f"Hello {name}"
 
@@ -35,19 +38,19 @@ print(say_whee)
 say_whee()
 
 """
-from datetime import datetime
+# from datetime import datetime
 
-def not_during_the_night(func):
-    def wrapper():
-        if 7 <= datetime.now().hour < 16.10:
-            func()
-        else:
-            pass  # Hush, the neighbors are asleep
-    return wrapper
+# def not_during_the_night(func):
+#     def wrapper():
+#         if 7 <= datetime.now().hour < 16.10:
+#             func()
+#         else:
+#             pass  # Hush, the neighbors are asleep
+#     return wrapper
 
-def say_whee():
-    print("Whee!")
+# def say_whee():
+#     print("Whee!")
 
-say_whee = not_during_the_night(say_whee)
+# say_whee = not_during_the_night(say_whee)
 
-say_whee()
+# say_whee()

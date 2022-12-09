@@ -92,8 +92,7 @@ class Meeting(models.Model):
 
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE)
-    day = models.CharField(max_length=10, choices=DAY_CHOICES)
-    dayAsInt= models.IntegerField(choices = Day.choices, default = Day.SUN)
+    day= models.IntegerField(choices = Day.choices, default = Day.SUN)
     startTime=models.TimeField()
     duration=models.DurationField()
     description= models.TextField(blank=True)
