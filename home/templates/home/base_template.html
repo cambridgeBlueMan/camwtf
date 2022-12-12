@@ -15,6 +15,14 @@
         
         <div class="jumbotron text-center">
             <h1>AA</h1>
+            <div class="form-inline">
+                <label for="sel1">Select meeting by town:</label>
+                <select class="form-control" id="sel1">
+                    {% for town in towns %}
+                    <option valie = {{town.id}}>{{town.name}}</option>
+                    {% endfor %}
+                </select>
+              </div>
             
 {% block mycontent %}
 {% endblock %}

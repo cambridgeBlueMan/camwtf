@@ -6,7 +6,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import loader
 
-from .models import Region, Ig, Group, Venue, Meeting
+from .models import Region, Ig, Group, Venue, Meeting, Town
 
 def main(request):
     meetings = Meeting.objects.all()
@@ -24,7 +24,7 @@ def intergroup(request, ig):
     meetings = Meeting.objects.filter(group__ig = ig).order_by('town','day')
     template = loader.get_template('home/main.html')
     context = {
-        'meetings': meetings
+        'meetings': meetings,
     }
     return HttpResponse(template.render(context, request))
 
@@ -46,6 +46,7 @@ def town(request, town):
 
 def byDay(request, ig):
     meetings = Meeting.objects.filter(group__ig = ig).order_by('day')
+    town = Town.objects.filter(county = 15)
     print(meetings)
     # initialise a list to hold lists for each days meetings
     sortedMeetings = [[],[],[],[],[],[],[]]
@@ -63,7 +64,8 @@ def byDay(request, ig):
     context = {
         'meetings': meetings,
         'sortedMeetings': sortedMeetings,
-        'days': days
+        'days': days,
+        'towns': town
     }
     return HttpResponse(template.render(context, request))
 
