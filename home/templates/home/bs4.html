@@ -1,3 +1,4 @@
+{% load wtf_extras %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -23,8 +24,8 @@
       <!-- option box with posh switch -->
       <div class="p-2">
         <div class="custom-control custom-switch">
-          <input class="custom-control-input" onclick="sortByDay(this.checked)" ) type="checkbox" id="mySwitch"
-            name="darkmode" value="yes" >
+          <input class="custom-control-input" onchange="getAjax()" ) type="checkbox" id="mySwitch" name="darkmode"
+            value="yes">
           <label class="custom-control-label" for="mySwitch">Order by Day</label>
         </div>
       </div>
@@ -62,11 +63,23 @@
       </div>
     </div>
     <!-- END OF NAV BAR STUFF -->
+    <form id="theForm" action="" method="get"></form>
   </div>
+  <div class="container" id="data">Hello Everybody!!!</div>
+
+  <div id="lea"></div>
   <script>
-    sortByDay = function (val) {
-      alert(val)
+    function getAjax() {
+      const xhttp = new XMLHttpRequest();
+      xhttp.onload = function () {
+        document.getElementById("data").innerHTML = this.responseText;
+      }
+      xhttp.open("GET", "ajax", true);
+      xhttp.send();
     }
+
+  </script>
+  <script>
     getTown = function (val) {
       alert(val)
     }
