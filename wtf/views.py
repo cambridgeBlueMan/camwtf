@@ -19,8 +19,11 @@ def cambs(request):
     }
     return HttpResponse(template.render(context, request))
 
-def ajax(request):
-    meetings = Meeting.objects.filter(venue__town__county = 5).order_by('venue__town__name','day')
+def ajax(request, theTown):
+    if theTown == 1722:
+        meetings = Meeting.objects.filter(venue__town__county = 5).order_by('day')
+    else:
+        meetings = Meeting.objects.filter(venue__town__id = theTown).order_by('day')
     towns = Town.objects.filter(county = 5)
     template = loader.get_template('home/ajax.html')
     context = {
@@ -30,22 +33,23 @@ def ajax(request):
     }
     return HttpResponse(template.render(context, request))
 
-def ajaxByDay(request, ig):
-    # add a filter for town
-    meetings = Meeting.objects.filter(venue__town__county = 5).order_by('day')
+def ajaxByDay(request, theTown):
+    # get list of towns for this county to populate dropdown
     town = Town.objects.filter(county = 5)
-    #print(meetings)
+    # if this is for all towns
+    if theTown == 1722:
+        meetings = Meeting.objects.filter(venue__town__county = 5).order_by('day')
+    else:
+        meetings = Meeting.objects.filter(venue__town__id = theTown).order_by('day')
+
     # initialise a list to hold lists for each days meetings
     sortedMeetings = [[],[],[],[],[],[],[]]
-    # for i in range(7):
-    #     # initialise inner lists to hold the data by day
-    #     sortedMeetings[i]=[]
-    # print(sortedMeetings)
     for meeting in meetings:
         for num in range(7):
             if meeting.day == num + 1:
                 sortedMeetings[num].append(meeting)
-    #print(sortedMeetings)
+    # if there are no meetings for a particular day then the list element will be empty
+    sortedMeetings = [x for x in sortedMeetings if x]
     days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
     template = loader.get_template('home/ajaxByDay.html')
     context = {
