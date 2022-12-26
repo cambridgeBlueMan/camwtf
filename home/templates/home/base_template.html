@@ -76,9 +76,8 @@
         $(document).ready(function () {
             const xhttp = new XMLHttpRequest();
             xhttp.onload = function () {
-                document.getElementById("5miles").setEnabled = false;
-                document.getElementById("10miles").setEnabled = false;
-                document.getElementById("20miles").setEnabled = false;
+                document.getElementById("distanceRads").setEnabled = false;
+                
                 document.getElementById("data").innerHTML = this.responseText;
             };
             // 1722 is id for all towns
@@ -88,16 +87,13 @@
         });
         function getAjax(state) {
             if (state == 1722) {
-                alert("all towns")
-                document.getElementById("5miles").setEnabled = false;
-                document.getElementById("10miles").setEnabled = false;
-                document.getElementById("20miles").setEnabled = false;
+                //alert("all towns")
+                document.getElementById("distanceRads").disabled = true;   
             }
             else {
-                document.getElementById("5miles").setEnabled = true;
-                document.getElementById("10miles").setEnabled = true;
-                document.getElementById("20miles").setEnabled = true;
-                alert(state)
+                
+                document.getElementById("distanceRads").disabled = false;
+                //alert(state)
             }
             const xhttp = new XMLHttpRequest();
             xhttp.onload = function () {
