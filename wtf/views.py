@@ -7,7 +7,7 @@ from django.http import HttpResponse
 from django.template import loader
 
 from .models import Region, Ig, Group, Venue, Meeting, Town
-
+from math import radians, cos, sin, asin, sqrt
 
 def cambs(request):
     meetings = Meeting.objects.filter(venue__town__county = 5).order_by('venue__town__name','day')
@@ -19,13 +19,35 @@ def cambs(request):
     }
     return HttpResponse(template.render(context, request))
 
-def ajax(request, theTown):
+def byTown(request, theTown, lnRange):
     if theTown == 1722:
-        meetings = Meeting.objects.filter(venue__town__county = 5).order_by('day')
+        meetings = Meeting.objects.filter(venue__town__county = 5) #.order_by('venue_town')
     else:
-        meetings = Meeting.objects.filter(venue__town__id = theTown).order_by('day')
+        meetings = list(Meeting.objects.filter(venue__town__id = theTown).order_by('day'))
+        # get the town, so we can access the lat and long
+        center = Town.objects.filter(id = theTown)
+        if lnRange > 0:
+            # get all meetings and add those within the current lnRange
+            allMeetings = Meeting.objects.filter(venue__town__county = 5).order_by('day')
+            # test these meetings for distance from center and 
+            # if appropriate add to the dataset
+            for meeting in allMeetings:
+                if calcDistance(
+                    center[0].latitude,
+                    center[0].longtitude,
+                    meeting.venue.latitude,
+                    meeting.venue.longtitude,
+                    lnRange
+                    ) == True:
+                    # need to check whether we already got it and then we need to sort
+                    meetings.append(meeting)
+            
+            meetings = list(dict.fromkeys(meetings))
+            #meetings.sort(key=center[0].name)
+
+
     towns = Town.objects.filter(county = 5)
-    template = loader.get_template('home/ajax.html')
+    template = loader.get_template('home/byTown.html')
     context = {
         'meetings': meetings,
         'towns': towns
@@ -33,105 +55,80 @@ def ajax(request, theTown):
     }
     return HttpResponse(template.render(context, request))
 
-def ajaxByDay(request, theTown):
+def byDay(request, theTown, lnRange):
     # get list of towns for this county to populate dropdown
-    town = Town.objects.filter(county = 5)
     # if this is for all towns
     if theTown == 1722:
+        # get query set of all meetings
         meetings = Meeting.objects.filter(venue__town__county = 5).order_by('day')
     else:
-        meetings = Meeting.objects.filter(venue__town__id = theTown).order_by('day')
+        # get query set for the specified town 
+        meetings = list(Meeting.objects.filter(venue__town__id = theTown).order_by('day'))
 
+        # get the town, so we can subsequently access its lat and long
+        center = Town.objects.filter(id = theTown)
+
+        if lnRange > 0:
+            # get all meetings and add those within the current lnRange
+            allMeetings = Meeting.objects.filter(venue__town__county = 5).order_by('day')
+            # test these meetings for distance from center and 
+            # if appropriate add to the dataset
+            for meeting in allMeetings:
+                if calcDistance(
+                    center[0].latitude,
+                    center[0].longtitude,
+                    meeting.venue.latitude,
+                    meeting.venue.longtitude,
+                    lnRange
+                    ) == True:
+                    # need to check whether we already got it and then we need to sort
+                    meetings.append(meeting)
+            
+            meetings = list(dict.fromkeys(meetings))
+            #meetings.sort(key=center[0].name)
     # initialise a list to hold lists for each days meetings
     sortedMeetings = [[],[],[],[],[],[],[]]
     for meeting in meetings:
-        for num in range(7):
-            if meeting.day == num + 1:
-                sortedMeetings[num].append(meeting)
+        for i in range(7):
+            if meeting.day == i + 1:
+                sortedMeetings[i].append(meeting)
     # if there are no meetings for a particular day then the list element will be empty
     sortedMeetings = [x for x in sortedMeetings if x]
     days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
-    template = loader.get_template('home/ajaxByDay.html')
+    template = loader.get_template('home/byDay.html')
+    towns = Town.objects.filter(county = 5)
     context = {
         'meetings': meetings,
         'sortedMeetings': sortedMeetings,
         'days': days,
-        'towns': town
+        'towns': towns
     }
     return HttpResponse(template.render(context, request))
 
 
-# def bs4(request):
-#     meetings = Meeting.objects.all()
-#     template = loader.get_template('home/bs4.html')
-#     context = {
-#         'meetings': meetings
-#     }
-#     return HttpResponse(template.render(context, request))
-
-# def intergroup(request, ig):
-#     """
-#     Takes an integer representing an intergroup and filters meetings based on
-#     that intergroup
-#     """
-#     meetings = Meeting.objects.filter(group__ig = ig).order_by('town','day')
-#     template = loader.get_template('home/main.html')
-#     context = {
-#         'meetings': meetings,
-#     }
-#     return HttpResponse(template.render(context, request))
-
-# def town(request, town):
-
-#     """ takes either an integer representing a town or string of the town name 
-#     and returns all meetings in that town """
-
-#     if type(town) is str:
-#         if town == 'all':
-#             meetings = Meeting.objects.all()
-#         else:    
-#             meetings = Meeting.objects.filter(venue__town__name = town)
-#     if type(town) is int:
-#         meetings = Meeting.objects.filter(venue__town__id = town)
-
-#     template = loader.get_template('home/by_town.html')
-#     context = {
-#         'meetings': meetings
-#     }
-#     return HttpResponse(template.render(context, request))
-
-""" def byDay(request, ig):
-    meetings = Meeting.objects.filter(group__ig = ig).order_by('day')
-    town = Town.objects.filter(county = 15)
-    #print(meetings)
-    # initialise a list to hold lists for each days meetings
-    sortedMeetings = [[],[],[],[],[],[],[]]
-    # for i in range(7):
-    #     # initialise inner lists to hold the data by day
-    #     sortedMeetings[i]=[]
-    # print(sortedMeetings)
-    for meeting in meetings:
-        for num in range(7):
-            if meeting.day == num + 1:
-                sortedMeetings[num].append(meeting)
-    #print(sortedMeetings)
-    days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
-    template = loader.get_template('home/by_day.html')
-    context = {
-        'meetings': meetings,
-        'sortedMeetings': sortedMeetings,
-        'days': days,
-        'towns': town
-    }
-    return HttpResponse(template.render(context, request)) """
-
-
-# def main(request):
-#     meetings = Meeting.objects.all()
-#     template = loader.get_template('home/main.html')
-#     context = {
-#         'meetings': meetings
-#     }
-#     return HttpResponse(template.render(context, request))
-
-
+def calcDistance(lat1, lon1, lat2, lon2, distance ):
+     
+    # The math module contains a function named
+    # radians which converts from degrees to radians.
+    lon1 = radians(lon1)
+    lon2 = radians(lon2)
+    lat1 = radians(lat1)
+    lat2 = radians(lat2)
+      
+    # Haversine formula
+    dlon = lon2 - lon1
+    dlat = lat2 - lat1
+    a = sin(dlat / 2)**2 + cos(lat1) * cos(lat2) * sin(dlon / 2)**2
+ 
+    c = 2 * asin(sqrt(a))
+    
+    # Radius of earth in kilometers. Use 3956 for miles
+    r = 3956
+      
+    # calculate the result
+    if (c * r) <= distance:
+        lnret =  True
+    else:
+        lnret =  False
+    print("distance is: ", (c*r), lnret)
+    return lnret

@@ -26,7 +26,7 @@
             <!-- option box with posh switch -->
             <div class="p-2">
                 <div class="custom-control custom-switch">
-                    <input class="custom-control-input" onchange="getAjax()"  type="checkbox" id="mySwitch"
+                    <input class="custom-control-input" onchange="getData()"  type="checkbox" id="mySwitch"
                         name="darkmode" value="yes">
                     <label class="custom-control-label" for="mySwitch">Order by Day</label>
                 </div>
@@ -34,7 +34,7 @@
             <!-- town selector drop down -->
             <div class="p-2">
                 <label for="town">Select a town:</label>
-                <select name="town" id="town" onchange="getAjax(this.value)">
+                <select name="town" id="town" onchange="getData()">
                     <!-- 1722 is the id for a town in the database called "all" -->
                     <option value="1722">-- all --</option>
                     {% for town in towns %}
@@ -46,18 +46,18 @@
             <div class="p-2">
                 <fieldset disabled id = "distanceRads">
                 <div class="form-check form-check-inline">
-                    <input type="radio"  class="form-check-input" id="5miles" onchange="getRadius(this.value)"
-                        name="meetingRadius" value="5" checked>
-                    <label class="form-check-label" for="5miles" >within 5
+                    <input type="radio"  class="form-check-input" id="5miles" onchange="getData()"
+                        name="meetingRadius" value="0" checked>
+                    <label class="form-check-label" for="5miles" >within 0
                         miles</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input type="radio" class="form-check-input" id="10miles" onchange="getRadius(this.value)"
+                    <input type="radio" class="form-check-input" id="10miles" onchange="getData()"
                         name="meetingRadius" value="10" >
                     <label class="form-check-label" for="10miles" >within 10 miles</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input type="radio"  class="form-check-input" id='20miles' onchange="getRadius(this.value)"
+                    <input type="radio"  class="form-check-input" id='20miles' onchange="getData()"
                         name="meetingRadius" value="20">
                     <label class="form-check-label"  for="20miles">within 20 miles</label>
                 </div>
@@ -76,36 +76,49 @@
         $(document).ready(function () {
             const xhttp = new XMLHttpRequest();
             xhttp.onload = function () {
-                document.getElementById("distanceRads").setEnabled = false;
-                
+                document.getElementById("distanceRads").setEnabled = false;    
                 document.getElementById("data").innerHTML = this.responseText;
             };
             // 1722 is id for all towns
-            xhttp.open("GET", "ajax/1722", true);
+            xhttp.open("GET", "byTown/1722/0", true);
             xhttp.send();
             console.log("ready!");
         });
-        function getAjax(state) {
-            if (state == 1722) {
-                //alert("all towns")
+
+        function getRadioValue() {
+            var ele = document.getElementsByName('meetingRadius');  
+            for(i = 0; i < ele.length; i++) {
+                if(ele[i].checked) {
+                    return ele[i].value
+                }
+            }
+        }
+        function getData() {
+
+            // *******************
+            // do stuff for client
+            if (document.getElementById("town").value == 1722) {
                 document.getElementById("distanceRads").disabled = true;   
             }
             else {
-                
                 document.getElementById("distanceRads").disabled = false;
-                //alert(state)
-            }
+            };
+
+            // ***********************
+            // now do stuff for server
             const xhttp = new XMLHttpRequest();
             xhttp.onload = function () {
                 document.getElementById("data").innerHTML = this.responseText;
             };
 
             if (document.getElementById("mySwitch").checked == true) {
-                urlString = "ajaxByDay/" + document.getElementById("town").value 
+                urlString = "byDay/" + document.getElementById("town").value 
+                + "/" + getRadioValue() 
                 xhttp.open("GET", urlString, true);
             }
             else {
-                urlString = "ajax/" + document.getElementById("town").value 
+                urlString = "byTown/" + document.getElementById("town").value 
+                + "/" + getRadioValue() 
                 xhttp.open("GET", urlString, true);
             };
             xhttp.send();
@@ -115,10 +128,10 @@
     <script>
         getTown = function (val) {
 
-            alert(val)
+            //alert(val)
         }
         getRadius = function (val) {
-            alert(val)
+            //alert(val)
         }
     </script>
 

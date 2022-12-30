@@ -57,7 +57,22 @@ class Town(models.Model):
     name = models.CharField(max_length=100)
     county = models.ForeignKey(County, on_delete=models.CASCADE)
     description = models.TextField(blank = True)
+    latitude=models.FloatField(null=True, blank=True)
+    longtitude=models.FloatField(null=True, blank=True)
 
+    """    
+    null=True sets NULL (versus NOT NULL) on the column in your DB. Blank values for Django 
+    field types such as DateTimeField or ForeignKey will be stored as NULL in the DB.
+
+    blank determines whether the field will be required in forms. This includes the admin 
+    and your custom forms. If blank=True then the field will not be required, whereas if it's 
+    False the field cannot be blank.
+
+    The combo of the two is so frequent because typically if you're going to allow a field 
+    to be blank in your form, you're going to also need your database to allow NULL values for 
+    that field. The exception is CharFields and TextFields, which in Django are never saved as 
+    NULL. Blank values are stored in the DB as an empty string ('').
+    """
     def __str__(self):
         return self.name
 
