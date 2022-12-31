@@ -130,5 +130,5 @@ def calcDistance(lat1, lon1, lat2, lon2, distance ):
         lnret =  True
     else:
         lnret =  False
-    print("distance is: ", (c*r), lnret)
+    # print("distance is: ", (c*r), lnret)
     return lnret
