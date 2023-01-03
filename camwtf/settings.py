@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     #
     'wtf.apps.WtfConfig',
     'home.apps.HomeConfig',
-    'blog.apps.BlogConfig'
+    'blog.apps.BlogConfig',
+    'authz.apps.AuthzConfig'
     
 ]
 
