@@ -40,6 +40,19 @@ class ManualProtect(View) :
 
     """
     def get(self, request):
+        """
+        We want to transfer the user to a login page from many pages in our application 
+        and when they successfully log in, we want to bring them back to our page or some 
+        other page.
+
+        The "next=" parameter tells login or logout  where to redirect the user after login
+        
+        To allow us to control the look and feel of the login page we must provide a template 
+        called "registration/login.html"
+        Django describes what needs to be in this template
+        We can put this in any of our application templates folders
+        
+        """
         if not request.user.is_authenticated :
             loginurl = reverse('login')+'?'+urlencode({'next': request.path})
             return redirect(loginurl)
@@ -50,7 +63,7 @@ class ProtectView(LoginRequiredMixin, View) :
     When using class-based views, you can achieve the same behavior as with login_required 
     by using the LoginRequiredMixin. This mixin should be at the leftmost position in the 
     inheritance list.
-    
+
     """
     def get(self, request):
         return render(request, 'authz/main.html')
