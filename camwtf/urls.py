@@ -21,9 +21,6 @@ urlpatterns = [
     path("authz", include("authz.urls")),
 
     path('admin/', admin.site.urls),
-    """We need to add a path to the code that gives us login and logout urls
-    We can reverse lookup these urls using the 'login' and 'logout' view names
-    """
     path('accounts/', include('django.contrib.auth.urls')),
 
 ]
