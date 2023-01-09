@@ -4,16 +4,8 @@
   {%if forloop.counter == 1 %}
     <div class="row">
   {% endif %}
-  <div class="col-sm-4">
-    <h5>{{meeting.group }}</h5>
-    <p class="mb-0">{{meeting.venue.address1}}</p>
-      {% if meeting.venue.address2 > "" %}
-      <p class = "mb-0">{{meeting.venue.address2}}</p>
-    {% endif %}
-    {% if meeting.venue.address3 > "" %}
-    <p>{{meeting.venue.address3}}</p>
-    {% endif %}
-    <p class="font-weight-bold">{{meeting.venue.town}} {{meeting.venue.postcode}}</p>
+
+  {% include "home/addrLines.html" %}
 
       <p><u>{{meeting.day|lnDay}}</u> <em>{{meeting.startTime}} {{meeting.duration|duration}}</em></em></p>
 
