@@ -1,28 +1,28 @@
 {% load wtf_extras %}
+
 {% for sm in sortedMeetings %}
 <h5 class="bg-primary text-white">{{sm.0.day|lnDay}}</h5>
 <div class="row">
     {% for meeting in sm %}
-    {% if forloop.counter == 1 %}
-    {% endif %}
-
+    
     <div class="col-sm-4">
-    <h5>{{meeting.group }}</h5>
-    <p class="mb-0">{{meeting.venue.address1}}</p>
-      {% if meeting.venue.address2 > "" %}
-      <p class = "mb-0">{{meeting.venue.address2}}</p>
-    {% endif %}
-    {% if meeting.venue.address3 > "" %}
-    <p>{{meeting.venue.address3}}</p>
-    {% endif %}
+        <h5>{{meeting.group }}</h5>
+        <p class="mb-0">{{meeting.venue.address1}}</p>
+        {% if meeting.venue.address2 > "" %}
+        <p class="mb-0">{{meeting.venue.address2}}</p>
+        {% endif %}
+        {% if meeting.venue.address3 > "" %}
+        <p>{{meeting.venue.address3}}</p>
+        {% endif %}
         <p class="font-weight-bold">{{meeting.venue.town}} {{meeting.venue.postcode}}</p>
 
-            <p>Start time: {{meeting.startTime}} {{meeting.duration|duration}}</p>
-            <p>Disabled access: {{meeting.disabledAccess}}<i class="fas fa-wheelchair"></i></p>
+        <p>Start time: {{meeting.startTime}} {{meeting.duration|duration}}</p>
+
+        <p>Disabled access: {{meeting.disabledAccess}}<i class="fas fa-wheelchair"></i></p>
     </div>
     {% if forloop.counter|divisibleby:"3" %}
-</div>
-<div class="row">
+        </div>
+        <div class="row">
     {% endif %}
 
     {% endfor %}

@@ -1,10 +1,9 @@
 {% load wtf_extras %}
 
 {% for meeting in meetings %}
-{%if forloop.counter == 1 %}
-<div class="row">
+  {%if forloop.counter == 1 %}
+    <div class="row">
   {% endif %}
-
   <div class="col-sm-4">
     <h5>{{meeting.group }}</h5>
     <p class="mb-0">{{meeting.venue.address1}}</p>
@@ -17,6 +16,7 @@
     <p class="font-weight-bold">{{meeting.venue.town}} {{meeting.venue.postcode}}</p>
 
       <p><u>{{meeting.day|lnDay}}</u> <em>{{meeting.startTime}} {{meeting.duration|duration}}</em></em></p>
+
       <p>Disabled access: {{meeting.disabledAccess}}<i class="fas fa-wheelchair"></i></p>
   </div>
   {% if forloop.counter|divisibleby:"3" %}
