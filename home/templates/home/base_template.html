@@ -21,50 +21,52 @@
     <div class="container-fluid p-5 text-center" style="background-color:#e9ecef">
         <h1 class="display-1">AA</h1>
         <p style="color: #212529" ;>Cambridgeshire Alcoholics Anonymous Meeting List</p>
-        <div class="d-flex justify-content-center mb-3">
-
-            <!-- option box with posh switch -->
-            <div class="p-2">
-                <div class="custom-control custom-switch">
-                    <input class="custom-control-input" onchange="getData()"  type="checkbox" id="mySwitch"
-                        name="darkmode" value="yes">
-                    <label class="custom-control-label" for="mySwitch">Order by Day</label>
+    </div>
+        <div class="container">
+            <div class="row">
+                <!-- option box with posh switch -->
+                <div class="col-sm-3">
+                    <div class="custom-control custom-switch">
+                        <input class="custom-control-input" onchange="getData()"  type="checkbox" id="mySwitch"
+                            name="darkmode" value="yes">
+                        <label class="custom-control-label" for="mySwitch">Order by Day</label>
+                    </div>
                 </div>
-            </div>
-            <!-- town selector drop down -->
-            <div class="p-2">
-                <label for="town">Select a town:</label>
-                <select name="town" id="town" onchange="getData()">
-                    <!-- 1722 is the id for a town in the database called "all" -->
-                    <option value="1722">-- all --</option>
-                    {% for town in towns %}
-                    <option value={{town.id}}>{{town.name}}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <!-- radius selector for town -->
-            <div class="p-2">
+                <!-- town selector drop down -->
+                <div class="col-sm-3">
+                    <label for="town">Select a town:</label>
+                    <select name="town" id="town" onchange="getData()">
+                        <!-- 1722 is the id for a town in the database called "all" -->
+                        <option value="1722">-- all --</option>
+                        {% for town in towns %}
+                        <option value={{town.id}}>{{town.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <!-- radius selector for town -->
+                <div class="col-sm-6">
                 <fieldset disabled id = "distanceRads">
-                <div class="form-check form-check-inline">
-                    <input type="radio"  class="form-check-input" id="5miles" onchange="getData()"
+                <!-- <div class="col-sm-2"> -->
+                    <input type="radio"   id="5miles" onchange="getData()"
                         name="meetingRadius" value="0" checked>
                     <label class="form-check-label" for="5miles" >within 0
                         miles</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input type="radio" class="form-check-input" id="10miles" onchange="getData()"
+                <!-- </div> -->
+                <!-- <div class="col-sm-2"> -->
+                    <input type="radio"  id="10miles" onchange="getData()"
                         name="meetingRadius" value="10" >
                     <label class="form-check-label" for="10miles" >within 10 miles</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input type="radio"  class="form-check-input" id='20miles' onchange="getData()"
+                <!-- </div> -->
+                <!-- <div class="col-sm-2"> -->
+                    <input type="radio"  id='20miles' onchange="getData()"
                         name="meetingRadius" value="20">
                     <label class="form-check-label"  for="20miles">within 20 miles</label>
-                </div>
+                <!-- </div> -->
                 </fieldset>
+                </div>
             </div>
         </div>
-    </div>
+    
         <!--  END OF NAVBAR STUFF -->
 
     </div>
